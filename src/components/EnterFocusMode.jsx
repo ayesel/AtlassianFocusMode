@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './EnterFocusMode.css';
 
 const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
-  const [currentStep, setCurrentStep] = useState(0);
   const [loadingText, setLoadingText] = useState('Scanning cross-project relationships...');
   const [loadedCategories, setLoadedCategories] = useState([]);
   
@@ -55,12 +54,10 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
     ];
 
     // Update loading text
+    let currentStep = 0;
     const textInterval = setInterval(() => {
-      setCurrentStep(prev => {
-        const next = (prev + 1) % loadingSteps.length;
-        setLoadingText(loadingSteps[next]);
-        return next;
-      });
+      currentStep = (currentStep + 1) % loadingSteps.length;
+      setLoadingText(loadingSteps[currentStep]);
     }, 2000);
 
     // Load categories one by one with smooth timing
@@ -89,7 +86,7 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
     return () => {
       clearInterval(textInterval);
     };
-  }, [isOpen, onComplete]);
+  }, [isOpen, onComplete, categories]);
 
   if (!isOpen) return null;
 

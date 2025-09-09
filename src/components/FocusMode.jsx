@@ -5,7 +5,6 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
-  const [hasSearched, setHasSearched] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState({
     researchInsights: false,
     pastDecisions: false,
@@ -43,7 +42,6 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
   const performAISearch = (query) => {
     if (!query.trim()) {
       setSearchResults([]);
-      setHasSearched(false);
       setIsSearching(false);
       return;
     }
@@ -94,7 +92,6 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       .sort((a, b) => b.relevanceScore - a.relevanceScore);
 
       setSearchResults(results);
-      setHasSearched(true);
       setIsSearching(false);
     }, 800);
   };
@@ -108,7 +105,6 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
   const clearSearch = () => {
     setSearchQuery('');
     setSearchResults([]);
-    setHasSearched(false);
     setIsSearching(false);
   };
 
