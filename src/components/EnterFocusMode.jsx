@@ -68,13 +68,9 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
       
       setTimeout(() => {
         if (cancelled) return;
-        console.log(`Loading category ${index}: ${categories[index].id}`);
         setLoadedCategories(prev => {
           if (cancelled) return prev;
-          const newCategories = [...prev, categories[index].id];
-          console.log(`Loaded categories count: ${newCategories.length}/${categories.length}`);
-          console.log(`Button should be ready: ${newCategories.length === categories.length}`);
-          return newCategories;
+          return [...prev, categories[index].id];
         });
         loadCategory(index + 1);
       }, 1200);
@@ -83,14 +79,11 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
     // Complete sequence when all categories are loaded
     const completeSequence = () => {
       if (cancelled) return;
-      console.log('All categories loaded, starting completion sequence');
       setTimeout(() => {
         if (cancelled) return;
-        console.log('Setting loading text to "Analysis complete!"');
         setLoadingText('Analysis complete!');
         setTimeout(() => {
           if (cancelled) return;
-          console.log('Calling onComplete()');
           onComplete();
         }, 1500);
       }, 800);
@@ -169,11 +162,6 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
             className={`continue-btn ${loadedCategories.length === categories.length ? 'ready' : ''}`}
             disabled={loadedCategories.length !== categories.length}
             onClick={onComplete}
-            ref={(btn) => {
-              if (btn) {
-                console.log(`Button classes: ${btn.className}, disabled: ${btn.disabled}`);
-              }
-            }}
           >
             <i className="fa-solid fa-lightbulb"></i>
             Enter Focus workspace
