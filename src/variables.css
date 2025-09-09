@@ -1,0 +1,125 @@
+/* CSS Variables for consistent theming across the application */
+
+:root {
+  /* Primary Colors */
+  --color-primary-blue: #1868DB;
+  --color-primary-blue-dark: #0047AC;
+  --color-primary-blue-light: #E6F2FF;
+  --color-jira-blue: #0052cc;
+  --color-jira-blue-dark: #0747a6;
+  
+  /* Neutral Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-text-primary: #172b4d;
+  --color-text-secondary: #42526e;
+  --color-text-tertiary: #6b778c;
+  --color-text-disabled: #9aa0a6;
+  --color-text-medium: #4a5568;
+  --color-text-subtle: #6B6E76;
+  --color-text-dark: #292A2E;
+  
+  /* Background Colors */
+  --color-background-white: #ffffff;
+  --color-background-light: #fafbfc;
+  --color-background-neutral: #f4f5f7;
+  --color-background-subtle: #f8f9fa;
+  --color-background-overlay: rgba(0, 0, 0, 0.6);
+  
+  /* Border Colors */
+  --color-border-light: #dfe1e6;
+  --color-border-medium: #c1c7d0;
+  --color-border-subtle: #e5e5e5;
+  --color-border-focus: #0052cc;
+  
+  /* Status Colors */
+  --color-success: #00875a;
+  --color-success-light: #e3fcef;
+  --color-success-text: #006644;
+  --color-warning-light: #fff4e5;
+  --color-warning-bg: #fff3cd;
+  --color-warning-text: #856404;
+  --color-info-light: #f0f4ff;
+  --color-info-border: #b3ccff;
+  --color-muted: #97a0af;
+  --color-warning: #ff8b00;
+  --color-error: #de350b;
+  --color-error-light: #ffebe6;
+  --color-info: #0065ff;
+  --color-purple: #6554c0;
+  
+  /* Interactive Colors */
+  --color-hover-light: #ebecf0;
+  --color-hover-blue: #deebff;
+  --color-focus-blue: #4c9aff;
+  --color-active: #b3d4ff;
+  
+  /* Tag/Badge Colors */
+  --color-tag-background: #E6F2FF;
+  --color-tag-text: #0047AC;
+  --color-tag-count-background: rgba(0, 71, 172, 0.15);
+  
+  /* Priority Colors */
+  --color-priority-high: #de350b;
+  --color-priority-high-bg: #ffebe6;
+  --color-priority-medium: #ff8b00;
+  
+  /* Team Badge Colors */
+  --color-team-default-bg: #f0f0f0;
+  --color-team-research-bg: #e3fcef;
+  --color-team-research-text: #006644;
+  
+  /* AI Badge Colors */
+  --color-ai-gradient-start: #ff6b6b;
+  --color-ai-gradient-end: #ee5a52;
+  
+  /* Loading Icon Colors */
+  --color-loading-gradient-start: #e6b3ff;
+  --color-loading-gradient-end: #cc99ff;
+  --color-loading-text: #4a4a4a;
+  
+  /* Shadow Colors */
+  --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.3);
+  --shadow-blue: 0 4px 12px rgba(24, 104, 219, 0.15);
+  --shadow-focus: 0 4px 12px rgba(24, 104, 219, 0.3);
+  
+  /* Layout Variables */
+  --header-height: 56px;
+  --sidebar-width: 240px;
+  --border-radius-small: 3px;
+  --border-radius-medium: 6px;
+  --border-radius-large: 8px;
+  --border-radius-xl: 12px;
+  
+  /* Spacing Variables */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 40px;
+  
+  /* Font Variables */
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+  
+  /* Z-index Variables */
+  --z-index-dropdown: 100;
+  --z-index-modal: 1000;
+  --z-index-tooltip: 2000;
+  
+  /* Transition Variables */
+  --transition-fast: 0.15s;
+  --transition-medium: 0.3s;
+  --transition-slow: 0.4s;
+  --transition-curve: cubic-bezier(0.4, 0, 0.2, 1);
+}

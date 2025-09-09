@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/bigdavis/Desktop/Atlassian/**)",
+      "Bash(npm start)",
+      "Bash(find:*)",
+      "WebFetch(domain:asmar.atlassian.net)",
+      "WebFetch(domain:localhost)",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_evaluate",
+      "Bash(git add:*)",
+      "Bash(npm run build:*)",
+      "Bash(pkill:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
