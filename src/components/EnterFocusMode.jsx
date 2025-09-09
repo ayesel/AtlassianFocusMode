@@ -105,7 +105,7 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
       clearInterval(textInterval);
       clearTimeout(startTimeout);
     };
-  }, [isOpen, categories]);
+  }, [isOpen, categories]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isOpen) return null;
 

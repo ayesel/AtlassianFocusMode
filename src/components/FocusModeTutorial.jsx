@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './FocusModeTutorial.css';
 
 const FocusModeTutorial = ({ isOpen, onClose, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
-  const tutorialSteps = [
+  const tutorialSteps = useMemo(() => [
     {
       id: 'welcome',
       title: 'Welcome to Focus Mode!',
@@ -60,9 +60,36 @@ const FocusModeTutorial = ({ isOpen, onClose, onComplete }) => {
       showHighlight: true,
       action: 'Finish Tutorial'
     }
-  ];
+  ], []);
 
   useEffect(() => {
+    const updateSpotlight = () => {
+      const step = tutorialSteps[currentStep];
+      if (!step.target || !step.showHighlight) return;
+
+      // Try multiple selectors as fallbacks
+      const selectors = step.target.split(',').map(s => s.trim());
+      let targetElement = null;
+      
+      for (const selector of selectors) {
+        targetElement = document.querySelector(selector);
+        if (targetElement) break;
+      }
+      
+      if (targetElement) {
+        const rect = targetElement.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        document.documentElement.style.setProperty('--tutorial-spotlight-x', `${centerX}px`);
+        document.documentElement.style.setProperty('--tutorial-spotlight-y', `${centerY}px`);
+        document.documentElement.style.setProperty('--tutorial-spotlight-width', `${rect.width + 20}px`);
+        document.documentElement.style.setProperty('--tutorial-spotlight-height', `${rect.height + 20}px`);
+      } else {
+        console.log(`Tutorial: Could not find target element for step ${step.id}:`, step.target);
+      }
+    };
+
     if (isOpen) {
       setIsVisible(true);
       // Delay spotlight positioning to ensure DOM is ready
@@ -73,34 +100,7 @@ const FocusModeTutorial = ({ isOpen, onClose, onComplete }) => {
     } else {
       setIsVisible(false);
     }
-  }, [isOpen, currentStep]);
-
-  const updateSpotlight = () => {
-    const step = tutorialSteps[currentStep];
-    if (!step.target || !step.showHighlight) return;
-
-    // Try multiple selectors as fallbacks
-    const selectors = step.target.split(',').map(s => s.trim());
-    let targetElement = null;
-    
-    for (const selector of selectors) {
-      targetElement = document.querySelector(selector);
-      if (targetElement) break;
-    }
-    
-    if (targetElement) {
-      const rect = targetElement.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      document.documentElement.style.setProperty('--tutorial-spotlight-x', `${centerX}px`);
-      document.documentElement.style.setProperty('--tutorial-spotlight-y', `${centerY}px`);
-      document.documentElement.style.setProperty('--tutorial-spotlight-width', `${rect.width + 20}px`);
-      document.documentElement.style.setProperty('--tutorial-spotlight-height', `${rect.height + 20}px`);
-    } else {
-      console.log(`Tutorial: Could not find target element for step ${step.id}:`, step.target);
-    }
-  };
+  }, [isOpen, currentStep, tutorialSteps]);
 
   const nextStep = () => {
     console.log(`Tutorial: Moving from step ${currentStep} (${tutorialSteps[currentStep].id}) to next step`);
