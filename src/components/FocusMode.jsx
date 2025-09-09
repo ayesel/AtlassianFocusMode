@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './FocusMode.css';
+import ComparisonModal from './ComparisonModal';
+import FocusModeTutorial from './FocusModeTutorial';
 
 const FocusMode = ({ isOpen, onClose, onMinimize }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,6 +17,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
     researchTeam: false,
     productTeam: false,
     platformTeam: false,
+    designSystemTeam: false,
   });
   const [sortBy, setSortBy] = useState('relevance');
   const [lastMonths, setLastMonths] = useState(6);
@@ -26,6 +29,15 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
     teams: false,
   });
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('list'); // 'list' or 'tiles'
+  const [comparisonModalOpen, setComparisonModalOpen] = useState(false);
+  const [selectedComparisonInsight, setSelectedComparisonInsight] = useState(null);
+  const [tutorialOpen, setTutorialOpen] = useState(false);
+  const [hasSeenTutorial, setHasSeenTutorial] = useState(() => {
+    // Temporarily always show tutorial for testing
+    return false;
+    // return localStorage.getItem('focus-mode-tutorial-seen') === 'true';
+  });
 
   // AI Search keyword mapping
   const searchPatterns = {
@@ -131,6 +143,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
     { id: 'researchTeam', name: 'Research Team', count: 4, icon: 'fa-solid fa-flask' },
     { id: 'productTeam', name: 'Product Team', count: 10, icon: 'fa-solid fa-laptop' },
     { id: 'platformTeam', name: 'Platform Team', count: 3, icon: 'fa-solid fa-laptop-code' },
+    { id: 'designSystemTeam', name: 'Design System Team', count: 2, icon: 'fa-solid fa-palette' },
   ];
 
   const insights = [
@@ -140,6 +153,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Users experienced 67% higher frustration when error messages lacked actionable guidance. The study revealed that clear retry instructions reduced support tickets by 43% and improved user satisfaction scores by 2.1 points.',
       tags: ['User-Testing', 'Error-Analysis', 'Mobile-Focused'],
       team: 'Research Team',
+      assignee: 'Sarah Kim',
       category: 'researchInsights',
       priority: 'High-Priority',
       completedDaysAgo: 3,
@@ -150,6 +164,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Analysis of 2,847 password reset attempts showed that users abandon the process 34% of the time when error states are unclear. Implementing contextual help reduced abandonment by 28% across all device types.',
       tags: ['User-Testing', 'Error-Analysis', 'Mobile-Focused'],
       team: 'Research Team',
+      assignee: 'Mike Rodriguez',
       category: 'researchInsights',
       priority: 'Medium-Priority',
       completedDaysAgo: 3,
@@ -160,6 +175,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Study found that 78% of users prefer a warning before session timeout with an option to extend. Silent timeouts caused 52% of users to lose form data, resulting in significant frustration and task abandonment.',
       tags: ['Session-Management', 'UX-Research', 'Data-Loss-Prevention'],
       team: 'Research Team',
+      assignee: 'Emma Watson',
       category: 'researchInsights',
       priority: 'High-Priority',
       completedDaysAgo: 5,
@@ -170,6 +186,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Research shows 83% of mobile users prefer biometric authentication over passwords. Implementation reduced login time by 4.2 seconds average and decreased password reset requests by 71%.',
       tags: ['Biometrics', 'Mobile-Auth', 'User-Preference'],
       team: 'Research Team',
+      assignee: 'Carlos Silva',
       category: 'researchInsights',
       priority: 'Medium-Priority',
       completedDaysAgo: 7,
@@ -180,6 +197,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Team decided to use OAuth 2.0 with PKCE flow for mobile apps in Q2 2023. This decision improved security posture and reduced authentication-related vulnerabilities by 89%.',
       tags: ['OAuth', 'Security-Decision', 'Mobile-Architecture'],
       team: 'Platform Team',
+      assignee: 'Jennifer Liu',
       category: 'pastDecisions',
       priority: 'High-Priority',
       completedDaysAgo: 45,
@@ -190,6 +208,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Architectural decision to implement sliding session windows with 15-minute access tokens and 7-day refresh tokens. This balanced security with user experience, reducing forced logouts by 65%.',
       tags: ['Token-Management', 'Architecture', 'Security'],
       team: 'Platform Team',
+      assignee: 'Alex Chen',
       category: 'pastDecisions',
       priority: 'Medium-Priority',
       completedDaysAgo: 30,
@@ -200,6 +219,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Design system team created standardized error message components with consistent icons, colors, and copy patterns. Adoption across 12 products improved error comprehension by 41%.',
       tags: ['Design-System', 'Standardization', 'Error-Handling'],
       team: 'Design System Team',
+      assignee: 'David Park',
       category: 'crossTeamWork',
       priority: 'Medium-Priority',
       completedDaysAgo: 14,
@@ -210,6 +230,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'WCAG 2.1 AA compliance audit revealed 23 issues in authentication flows. Screen reader compatibility improved by 94% after implementing recommended changes, especially for error announcements.',
       tags: ['Accessibility', 'WCAG', 'Screen-Readers'],
       team: 'Design System Team',
+      assignee: 'Maya Patel',
       category: 'crossTeamWork',
       priority: 'High-Priority',
       completedDaysAgo: 10,
@@ -220,6 +241,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Platform team successfully deployed MFA to 500K users with 92% adoption rate. SMS-based 2FA most popular (67%), followed by authenticator apps (25%) and hardware keys (8%).',
       tags: ['MFA', '2FA', 'Security-Enhancement'],
       team: 'Platform Team',
+      assignee: 'James Wilson',
       category: 'crossTeamWork',
       priority: 'High-Priority',
       completedDaysAgo: 21,
@@ -230,6 +252,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Implemented progressive rate limiting on authentication endpoints: 5 attempts per minute, increasing lockout periods. Reduced brute force attempts by 99.2% without impacting legitimate users.',
       tags: ['Rate-Limiting', 'Security', 'Brute-Force-Protection'],
       team: 'Platform Team',
+      assignee: 'Jennifer Liu',
       category: 'technicalConstraints',
       priority: 'High-Priority',
       completedDaysAgo: 18,
@@ -240,6 +263,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Analytics team created real-time dashboard tracking authentication metrics: success rates (87%), error types, retry patterns, and device breakdowns. Identified mobile Safari as highest error rate (23%).',
       tags: ['Analytics', 'Metrics', 'Dashboard'],
       team: 'Analytics Team',
+      assignee: 'Ryan Taylor',
       category: 'crossTeamWork',
       priority: 'Medium-Priority',
       completedDaysAgo: 12,
@@ -250,6 +274,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Research found users prefer passphrases over complex passwords. Allowing 4+ word passphrases increased password strength by 156% while reducing reset requests by 34%.',
       tags: ['Password-Policy', 'User-Research', 'Security-UX'],
       team: 'Research Team',
+      assignee: 'Sarah Kim',
       category: 'researchInsights',
       priority: 'Medium-Priority',
       completedDaysAgo: 25,
@@ -280,6 +305,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       description: 'Product team found 45% of users prefer social login options. Google (62%), Apple (23%), and Facebook (15%) most requested. Reduced signup friction by 73% where implemented.',
       tags: ['Social-Login', 'OAuth', 'User-Preference'],
       team: 'Product Team',
+      assignee: 'Lisa Zhang',
       category: 'crossTeamWork',
       priority: 'Medium-Priority',
       completedDaysAgo: 8,
@@ -415,6 +441,39 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
       return newSet;
     });
   };
+
+  const handleCompareInsight = (insight) => {
+    setSelectedComparisonInsight(insight);
+    setComparisonModalOpen(true);
+  };
+
+  const handleCloseComparison = () => {
+    setComparisonModalOpen(false);
+    setSelectedComparisonInsight(null);
+  };
+
+  const startTutorial = () => {
+    setTutorialOpen(true);
+  };
+
+  const handleTutorialClose = () => {
+    setTutorialOpen(false);
+  };
+
+  const handleTutorialComplete = () => {
+    setHasSeenTutorial(true);
+    localStorage.setItem('focus-mode-tutorial-seen', 'true');
+  };
+
+  // Auto-start tutorial for first-time users
+  React.useEffect(() => {
+    if (isOpen && !hasSeenTutorial) {
+      const timer = setTimeout(() => {
+        setTutorialOpen(true);
+      }, 500); // Start tutorial after 0.5 second delay to ensure DOM is ready
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, hasSeenTutorial]);
 
   const toggleLinked = (insightId) => {
     setLinkedInsights(prev => {
@@ -674,7 +733,10 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
               <div className="filter-chips">
                 {/* Show active team filters only */}
                 {teams.filter(team => selectedTeams[team.id]).map(team => (
-                  <span key={team.id} className={`chip chip-team ${team.id === 'researchTeam' ? 'chip-team-research' : ''}`}>
+                  <span key={team.id} className={`chip chip-team ${
+                    team.id === 'researchTeam' ? 'chip-team-research' :
+                    team.id === 'designSystemTeam' ? 'chip-team-design' : ''
+                  }`}>
                     <i className={team.icon}></i>
                     {team.name}
                     <button 
@@ -688,6 +750,29 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
                 ))}
               </div>
               <div className="filter-controls">
+                <div className="view-controls">
+                  <button 
+                    className={`view-btn ${currentView === 'list' ? 'active' : ''}`}
+                    onClick={() => setCurrentView('list')}
+                    title="List view"
+                  >
+                    <i className="fa-solid fa-list"></i>
+                  </button>
+                  <button 
+                    className={`view-btn ${currentView === 'tiles' ? 'active' : ''}`}
+                    onClick={() => setCurrentView('tiles')}
+                    title="Tile view"
+                  >
+                    <i className="fa-solid fa-grip"></i>
+                  </button>
+                  <button 
+                    className="view-btn help-btn"
+                    onClick={startTutorial}
+                    title="Show tutorial"
+                  >
+                    <i className="fa-solid fa-question-circle"></i>
+                  </button>
+                </div>
                 <div className="sort-control">
                   <label>Sort by:</label>
                   <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -709,7 +794,7 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
               </div>
             </div>
 
-            <div className="insights-list">
+            <div className={`insights-container ${currentView}-view`}>
               {displayInsights.map(insight => (
                 <div key={insight.id} className="insight-card">
                   <div className="card-header">
@@ -718,7 +803,8 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
                         <span className={`team-badge ${
                           insight.team === 'Research Team' ? 'team-badge-research' :
                           insight.team === 'Platform Team' ? 'team-badge-platform' :
-                          insight.team === 'Product Team' ? 'team-badge-product' : ''
+                          insight.team === 'Product Team' ? 'team-badge-product' :
+                          insight.team === 'Design System Team' ? 'team-badge-design' : ''
                         }`}>
                           <i className={
                             insight.team === 'Research Team' ? 'fa-solid fa-flask' :
@@ -754,8 +840,21 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
                     ))}
                   </div>
                   <div className="card-footer">
-                    <span className="completion-info">Completed {insight.completedDaysAgo} days ago</span>
+                    <div className="footer-info">
+                      <div className="assignee-info">
+                        <i className="fa-solid fa-user"></i>
+                        <span>{insight.assignee || 'Team Member'}</span>
+                      </div>
+                      <span className="completion-info">Completed {insight.completedDaysAgo} days ago</span>
+                    </div>
                     <div className="card-actions">
+                      <button 
+                        className="action-btn icon-only"
+                        title="Compare with PT-1"
+                        onClick={() => handleCompareInsight(insight)}
+                      >
+                        <i className="fa-solid fa-code-compare"></i>
+                      </button>
                       <button 
                         className={`action-btn icon-only ${viewedInsights.has(insight.id) ? 'active' : ''}`}
                         title="View details"
@@ -816,7 +915,8 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
                         <span className={`bookmark-team-badge ${
                           insight.team === 'Research Team' ? 'research' :
                           insight.team === 'Platform Team' ? 'platform' :
-                          insight.team === 'Product Team' ? 'product' : ''
+                          insight.team === 'Product Team' ? 'product' :
+                          insight.team === 'Design System Team' ? 'design' : ''
                         }`}>
                           <i className={
                             insight.team === 'Research Team' ? 'fa-solid fa-flask' :
@@ -860,6 +960,18 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
           )}
         </div>
       </div>
+
+      <ComparisonModal
+        isOpen={comparisonModalOpen}
+        onClose={handleCloseComparison}
+        selectedInsight={selectedComparisonInsight}
+      />
+      
+      <FocusModeTutorial
+        isOpen={tutorialOpen}
+        onClose={handleTutorialClose}
+        onComplete={handleTutorialComplete}
+      />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import FocusMode from './components/FocusMode';
 import JiraTicketScreen from './components/JiraTicketScreen';
 import EnterFocusMode from './components/EnterFocusMode';
 import MinimizedFocusMode from './components/MinimizedFocusMode';
+import SpotlightIntro from './components/SpotlightIntro';
 
 function App() {
   const [isEnterFocusModeOpen, setIsEnterFocusModeOpen] = useState(false);
@@ -11,6 +12,7 @@ function App() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(0);
+  const [showSpotlight, setShowSpotlight] = useState(true);
 
   // Update last updated time
   useEffect(() => {
@@ -71,9 +73,15 @@ function App() {
     setLastUpdated(0);
   };
 
+  const handleSpotlightClose = () => {
+    setShowSpotlight(false);
+  };
+
   return (
     <div className="App">
-      <JiraTicketScreen onFocusModeOpen={handleFocusModeRequest} />
+      <JiraTicketScreen 
+        onFocusModeOpen={handleFocusModeRequest} 
+      />
       
       <EnterFocusMode 
         isOpen={isEnterFocusModeOpen}
@@ -97,6 +105,10 @@ function App() {
         teamsCount={3}
         lastUpdated={lastUpdated}
       />
+
+      {showSpotlight && (
+        <SpotlightIntro onClose={handleSpotlightClose} />
+      )}
     </div>
   );
 }

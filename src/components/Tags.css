@@ -1,0 +1,54 @@
+/* Tags Component Styles */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: var(--color-background-neutral);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+}
+
+.tag i {
+  font-size: 11px;
+}
+
+/* Tag Variants */
+.tag-primary {
+  background: var(--color-primary-blue-light);
+  color: var(--color-primary-blue-dark);
+}
+
+.tag-success {
+  background: #D4F4DD;
+  color: #0F5132;
+}
+
+.tag-warning {
+  background: #FFF3CD;
+  color: #664D03;
+}
+
+.tag-danger {
+  background: #F8D7DA;
+  color: #721C24;
+}
+
+.tag-info {
+  background: #D1ECF1;
+  color: #0C5460;
+}
+
+.tag-neutral {
+  background: var(--color-background-neutral);
+  color: var(--color-text-subtle);
+}
+
+/* Hover effects */
+.tag:hover {
+  opacity: 0.9;
+}

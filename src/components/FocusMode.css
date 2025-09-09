@@ -54,6 +54,51 @@
   gap: 12px;
 }
 
+/* View Controls */
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-background-neutral);
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.view-btn {
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--color-text-subtle);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-btn:hover {
+  color: var(--color-text-dark);
+  background: var(--color-background-neutral-hover);
+}
+
+.view-btn.active {
+  background: var(--color-primary-blue);
+  color: white;
+}
+
+.help-btn {
+  margin-left: 8px;
+  border-left: 1px solid var(--color-border-light);
+  padding-left: 12px;
+}
+
+.help-btn:hover {
+  background: var(--color-background-neutral);
+  color: var(--color-primary-blue);
+}
+
 .focus-icon {
   font-size: 24px;
   color: var(--color-primary-blue);
@@ -682,6 +727,16 @@
   color: var(--color-success);
 }
 
+.chip-team-design {
+  background: rgba(147, 51, 234, 0.1);
+  border-color: #9333ea;
+  color: #9333ea;
+}
+
+.chip-team-design i:first-child {
+  color: #9333ea;
+}
+
 .filter-controls {
   display: flex;
   gap: 16px;
@@ -745,10 +800,26 @@
   box-shadow: 0 0 0 2px rgba(24, 104, 219, 0.2);
 }
 
-.insights-list {
+/* Insights Container - supports both list and tiles views */
+.insights-container {
   padding: 20px;
   flex: 1;
   overflow-y: auto;
+}
+
+/* List View (default) */
+.insights-container.list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Tile View */
+.insights-container.tiles-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: start;
 }
 
 .insight-card {
@@ -756,8 +827,85 @@
   border: 1px solid var(--color-border-light);
   border-radius: 8px;
   padding: 20px;
-  margin-bottom: 16px;
   transition: box-shadow 0.2s;
+  height: fit-content;
+}
+
+/* List view specific styling */
+.list-view .insight-card {
+  margin-bottom: 16px;
+}
+
+/* Tiles view specific styling */
+.tiles-view .insight-card {
+  margin-bottom: 0;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tiles-view .card-header {
+  flex-shrink: 0;
+}
+
+.tiles-view .card-title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  max-height: 2.6em; /* 2 lines * 1.3 line-height */
+}
+
+.tiles-view .card-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tiles-view .card-description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  max-height: 4.2em; /* 3 lines * 1.4 line-height */
+}
+
+.tiles-view .card-footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.tiles-view .card-tags {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.tiles-view .tag {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+/* Responsive tile view adjustments */
+@media (max-width: 1200px) {
+  .tiles-view {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .tiles-view {
+    grid-template-columns: 1fr;
+  }
 }
 
 .insight-card:hover {
@@ -829,6 +977,15 @@
 
 .team-badge-product i {
   color: #1976d2;
+}
+
+.team-badge-design {
+  background: rgba(147, 51, 234, 0.1);
+  color: #9333ea;
+}
+
+.team-badge-design i {
+  color: #9333ea;
 }
 
 .priority-badge {
@@ -927,6 +1084,7 @@ mark {
   border-radius: 8px;
   font-size: 12px;
   color: var(--color-text-subtle);
+  font-weight: 500;
 }
 
 .card-footer {
@@ -940,6 +1098,27 @@ mark {
 .completion-info {
   font-size: 12px;
   color: var(--color-text-subtle);
+}
+
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.assignee-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.assignee-info i {
+  color: var(--color-text-subtle);
+  font-size: 11px;
 }
 
 .card-actions {
@@ -1177,6 +1356,15 @@ mark {
 
 .bookmark-team-badge.product i {
   color: #1976d2;
+}
+
+.bookmark-team-badge.design {
+  background: rgba(147, 51, 234, 0.1);
+  color: #9333ea;
+}
+
+.bookmark-team-badge.design i {
+  color: #9333ea;
 }
 
 .bookmark-team-badge i {

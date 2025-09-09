@@ -659,6 +659,18 @@
   transform: translateY(-1px);
 }
 
+.focus-mode-btn:focus {
+  background: var(--color-jira-blue);
+  outline: 2px solid var(--color-jira-blue-light);
+  outline-offset: 2px;
+}
+
+.focus-mode-btn:active {
+  background: var(--color-jira-blue-dark);
+  transform: translateY(0);
+}
+
+
 .action-btn {
   width: 32px;
   height: 32px;

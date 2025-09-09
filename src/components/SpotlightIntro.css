@@ -1,0 +1,308 @@
+/* Spotlight Intro Styles */
+
+.spotlight-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+
+.spotlight-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Allow clicks through in the spotlight area */
+.spotlight-overlay.active .spotlight-backdrop {
+  pointer-events: auto;
+}
+
+/* Make sure spotlight content card has pointer events */
+.spotlight-content {
+  pointer-events: auto;
+}
+
+.spotlight-overlay.closing {
+  opacity: 0;
+}
+
+/* Dark overlay with spotlight cutout */
+.spotlight-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--spotlight-x, 50%) var(--spotlight-y, 30%), 
+    transparent 110px,
+    rgba(0, 0, 0, 0.7) 130px,
+    rgba(0, 0, 0, 0.7)
+  );
+  cursor: pointer;
+}
+
+/* Default spotlight position - will be updated via JS to target Focus Mode button */
+.spotlight-overlay {
+  --spotlight-x: calc(100vw - 230px);
+  --spotlight-y: 90px;
+}
+
+/* Spotlight circle with pulsing glow */
+.spotlight-circle {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 50%;
+  left: calc(var(--spotlight-x) - 100px);
+  top: calc(var(--spotlight-y) - 100px);
+  box-shadow: 
+    0 0 0 2px rgba(24, 104, 219, 0.2),
+    0 0 20px rgba(24, 104, 219, 0.3);
+  animation: pulse 2s infinite;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 0 0 3px rgba(24, 104, 219, 0.3),
+      0 0 30px rgba(24, 104, 219, 0.5);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 
+      0 0 0 6px rgba(24, 104, 219, 0.2),
+      0 0 40px rgba(24, 104, 219, 0.7);
+  }
+}
+
+/* Content card */
+.spotlight-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 400px;
+  width: calc(100vw - 40px);
+  z-index: 1;
+}
+
+.spotlight-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-heavy);
+  border: 1px solid var(--color-border-light);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spotlight-header {
+  padding: 24px 24px 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.spotlight-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-blue-dark));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(24, 104, 219, 0.3);
+}
+
+.spotlight-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  flex: 1;
+}
+
+.spotlight-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--color-text-subtle);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.spotlight-close:hover {
+  background: var(--color-background-neutral);
+  color: var(--color-text-dark);
+}
+
+.spotlight-body {
+  padding: 20px 24px;
+}
+
+.spotlight-body p {
+  margin: 0 0 20px 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.spotlight-features {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.spotlight-footer {
+  padding: 20px 24px 24px 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--color-primary-blue);
+  color: white;
+  border: 1px solid var(--color-primary-blue);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-blue-dark);
+  border-color: var(--color-primary-blue-dark);
+  box-shadow: 0 2px 8px rgba(24, 104, 219, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-light);
+}
+
+.btn-secondary:hover {
+  background: var(--color-background-neutral);
+  border-color: var(--color-border-medium);
+}
+
+/* Arrow pointing to Focus Mode button */
+.spotlight-arrow {
+  position: absolute;
+  top: -60px;
+  right: 20px;
+  display: none; /* Hide by default, show only on larger screens */
+}
+
+/* Arrow line */
+.arrow-line {
+  width: 2px;
+  height: 40px;
+  background: var(--color-primary-blue);
+  margin: 0 auto 2px auto;
+  border-radius: 1px;
+  animation: arrowPulse 1.5s ease-in-out infinite;
+}
+
+/* Arrow tip */
+.arrow-tip {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 8px solid var(--color-primary-blue);
+  margin: 0 auto;
+  animation: arrowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes arrowPulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .spotlight-content {
+    max-width: none;
+    width: calc(100vw - 20px);
+  }
+  
+  .spotlight-circle {
+    width: 180px;
+    height: 180px;
+    left: calc(var(--spotlight-x) - 90px);
+    top: calc(var(--spotlight-y) - 90px);
+  }
+  
+  .spotlight-overlay {
+    --spotlight-x: calc(100vw - 120px);
+    --spotlight-y: 80px;
+  }
+  
+  .spotlight-features {
+    justify-content: center;
+  }
+  
+  .spotlight-footer {
+    justify-content: center;
+  }
+}
+
+/* Animation for different screen positions */
+@media (min-width: 1200px) {
+  .spotlight-arrow {
+    display: block;
+  }
+  
+  .spotlight-content {
+    transform: translate(-70%, -50%); /* Position more to the left on larger screens */
+  }
+}

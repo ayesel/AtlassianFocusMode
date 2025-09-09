@@ -44,6 +44,8 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
       return;
     }
 
+    let cancelled = false;
+
     const loadingSteps = [
       'Scanning cross-project relationships...',
       'Analyzing project ecosystem...',
@@ -55,37 +57,62 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
     // Update loading text
     let currentStep = 0;
     const textInterval = setInterval(() => {
+      if (cancelled) return;
       currentStep = (currentStep + 1) % loadingSteps.length;
       setLoadingText(loadingSteps[currentStep]);
     }, 2000);
 
     // Load categories one by one with smooth timing
     const loadCategory = (index) => {
-      if (index < categories.length) {
+      if (cancelled || index >= categories.length) return;
+      
+      setTimeout(() => {
+        if (cancelled) return;
+        console.log(`Loading category ${index}: ${categories[index].id}`);
+        setLoadedCategories(prev => {
+          if (cancelled) return prev;
+          const newCategories = [...prev, categories[index].id];
+          console.log(`Loaded categories count: ${newCategories.length}/${categories.length}`);
+          console.log(`Button should be ready: ${newCategories.length === categories.length}`);
+          return newCategories;
+        });
+        loadCategory(index + 1);
+      }, 1200);
+    };
+
+    // Complete sequence when all categories are loaded
+    const completeSequence = () => {
+      if (cancelled) return;
+      console.log('All categories loaded, starting completion sequence');
+      setTimeout(() => {
+        if (cancelled) return;
+        console.log('Setting loading text to "Analysis complete!"');
+        setLoadingText('Analysis complete!');
         setTimeout(() => {
-          setLoadedCategories(prev => [...prev, categories[index].id]);
-          loadCategory(index + 1);
-        }, 1200); // Increased delay for smoother loading
-      } else {
-        // All categories loaded, wait a bit then complete
-        setTimeout(() => {
-          setLoadingText('Analysis complete!');
-          setTimeout(() => {
-            onComplete();
-          }, 1500);
-        }, 800);
-      }
+          if (cancelled) return;
+          console.log('Calling onComplete()');
+          onComplete();
+        }, 1500);
+      }, 800);
     };
 
     // Start loading after initial delay
-    setTimeout(() => {
+    const startTimeout = setTimeout(() => {
+      if (cancelled) return;
       loadCategory(0);
+      // Complete after all categories should be loaded
+      setTimeout(() => {
+        if (cancelled) return;
+        completeSequence();
+      }, categories.length * 1200 + 500);
     }, 1500);
 
     return () => {
+      cancelled = true;
       clearInterval(textInterval);
+      clearTimeout(startTimeout);
     };
-  }, [isOpen, onComplete, categories]);
+  }, [isOpen, categories]);
 
   if (!isOpen) return null;
 
@@ -142,6 +169,11 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
             className={`continue-btn ${loadedCategories.length === categories.length ? 'ready' : ''}`}
             disabled={loadedCategories.length !== categories.length}
             onClick={onComplete}
+            ref={(btn) => {
+              if (btn) {
+                console.log(`Button classes: ${btn.className}, disabled: ${btn.disabled}`);
+              }
+            }}
           >
             <i className="fa-solid fa-lightbulb"></i>
             Enter Focus workspace
