@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './EnterFocusMode.css';
 
 const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
   const [loadingText, setLoadingText] = useState('Scanning cross-project relationships...');
   const [loadedCategories, setLoadedCategories] = useState([]);
   
-  const categories = [
+  const categories = useMemo(() => [
     { 
       id: 'research', 
       name: 'Research Insights', 
@@ -34,13 +34,12 @@ const EnterFocusMode = ({ isOpen, onComplete, onCancel }) => {
       description: 'Security, performance, and integration requirements',
       findings: 8
     }
-  ];
+  ], []);
 
   useEffect(() => {
     if (!isOpen) {
       // Reset state when modal closes
       setLoadedCategories([]);
-      setCurrentStep(0);
       setLoadingText('Scanning cross-project relationships...');
       return;
     }
