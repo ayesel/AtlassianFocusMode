@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './FocusMode.css';
 import ComparisonModal from './ComparisonModal';
 import FocusModeTutorial from './FocusModeTutorial';
+import InsightDetailsModal from './InsightDetailsModal';
 
 const FocusMode = ({ isOpen, onClose, onMinimize }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,6 +39,8 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
     return false;
     // return localStorage.getItem('focus-mode-tutorial-seen') === 'true';
   });
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedDetailsInsight, setSelectedDetailsInsight] = useState(null);
 
   // AI Search keyword mapping
   const searchPatterns = {
@@ -858,7 +861,11 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
                       <button 
                         className={`action-btn icon-only ${viewedInsights.has(insight.id) ? 'active' : ''}`}
                         title="View details"
-                        onClick={() => toggleViewed(insight.id)}
+                        onClick={() => {
+                          toggleViewed(insight.id);
+                          setSelectedDetailsInsight(insight);
+                          setDetailsModalOpen(true);
+                        }}
                       >
                         <i className={`fa-${viewedInsights.has(insight.id) ? 'solid' : 'regular'} fa-eye`}></i>
                       </button>
@@ -965,6 +972,12 @@ const FocusMode = ({ isOpen, onClose, onMinimize }) => {
         isOpen={comparisonModalOpen}
         onClose={handleCloseComparison}
         selectedInsight={selectedComparisonInsight}
+      />
+
+      <InsightDetailsModal
+        isOpen={detailsModalOpen}
+        onClose={() => setDetailsModalOpen(false)}
+        insight={selectedDetailsInsight}
       />
       
       <FocusModeTutorial
